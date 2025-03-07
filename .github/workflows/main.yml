@@ -10,7 +10,7 @@ on:
 
 jobs:
   flutter-ci:
-    name: Build & Release
+    name: Build Android
     runs-on: ubuntu-latest
 
     steps:
@@ -25,11 +25,11 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Build APK file for Android
+      - name: Build APK file
         run: flutter build apk --release
           
       - name: Upload APK artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: android-apk
           path: build/app/outputs/flutter-apk/app-release.apk
@@ -38,13 +38,13 @@ jobs:
         run: flutter build web
 
       - name: Upload Web artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: flutter-web
           path: build/web
 
   flutter-windows:
-    name: Build EXE file for Windows
+    name: Build EXE file
     runs-on: windows-latest
 
     steps:
@@ -66,13 +66,13 @@ jobs:
         run: flutter build windows
 
       - name: Upload Windows artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: flutter-windows
           path: build/windows/runner/Release
 
   flutter-ios:
-    name: Build iOS App
+    name: Build IPA file
     runs-on: macos-latest
 
     steps:
@@ -91,7 +91,7 @@ jobs:
         run: flutter build ios --no-codesign
 
       - name: Upload iOS artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: flutter-ios
           path: build/ios/iphoneos
