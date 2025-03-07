@@ -1,0 +1,97 @@
+name: Project CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  flutter-ci:
+    name: Build & Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.x'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build APK file for Android
+        run: flutter build apk --release
+          
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: android-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+
+      - name: Build Web
+        run: flutter build web
+
+      - name: Upload Web artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: flutter-web
+          path: build/web
+
+  flutter-windows:
+    name: Build EXE file for Windows
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.x'
+
+      - name: Enable Windows Desktop
+        run: flutter config --enable-windows-desktop
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build Windows App
+        run: flutter build windows
+
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: flutter-windows
+          path: build/windows/runner/Release
+
+  flutter-ios:
+    name: Build iOS App
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.x'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build iOS
+        run: flutter build ios --no-codesign
+
+      - name: Upload iOS artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: flutter-ios
+          path: build/ios/iphoneos
