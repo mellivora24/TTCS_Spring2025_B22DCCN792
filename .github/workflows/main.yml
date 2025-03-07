@@ -44,7 +44,7 @@ jobs:
           path: build/web
 
   flutter-windows:
-    name: Build EXE file
+    name: Build Windows
     runs-on: windows-latest
 
     steps:
@@ -72,7 +72,7 @@ jobs:
           path: build/windows/runner/Release
 
   flutter-ios:
-    name: Build IPA file
+    name: Build iOS
     runs-on: macos-latest
 
     steps:
